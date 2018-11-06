@@ -4,9 +4,10 @@ import { AdvanceSearchBar, InputOption } from '../lib';
 const App = () => (
   <div>
     <AdvanceSearchBar>
-      <InputOption name="first_option" label="Primera Opción"/>
-      <InputOption name="second_option" label="Segunda Opción"/>
-      <InputOption name="third_option" label="Tercera Opción"/>
+      <InputOption name="first_option" label="Codigo de guía"/>
+      <InputOption name="second_option" label="Patente"/>
+      <InputOption name="third_option" label="Transportista"/>
+      <InputOption name="fouth_option" label="Estado"/>
     </AdvanceSearchBar>
   </div>
 );

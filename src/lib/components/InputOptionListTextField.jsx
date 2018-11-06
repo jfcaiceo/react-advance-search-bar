@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getFilteredChildren } from './InputOptionList.jsx';
 import './InputOptionListTextField.css'
 
 export default class InputOptionListTextField extends React.Component {
@@ -12,13 +13,26 @@ export default class InputOptionListTextField extends React.Component {
     this.props.focusChangeHandler(value);
   }
 
+  shouldComponentUpdate(prevProps) {
+    return prevProps.value !== this.props.value
+  }
+
   onKeyPress(event) {
     if (event.key === 'ArrowUp') {
-      this.props.changeSearchIndexSelected(Math.max(0, this.props.selectedOption - 1))
+      this.props.changeSearchIndexSelected(Math.max(0, this.props.selectedOption - 1));
     } else if (event.key === 'ArrowDown') {
-      this.props.changeSearchIndexSelected(this.props.selectedOption + 1)
+      let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
+      this.props.changeSearchIndexSelected(Math.min(options.length - 1, this.props.selectedOption + 1));
     } else if (event.key === 'Enter') {
+      let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
+      setTimeout(() => {
+        this.props.onOptionSelect(options[this.props.selectedOption]);
+      }, 10);
       return false;
+    }  else if (event.key === 'Backspace') {
+      if(this.props.value.length == 0) {
+        this.props.handleOptionDelete();
+      }
     }
   }
 
@@ -43,6 +57,7 @@ InputOptionListTextField.propTypes = {
   onOptionSelect: PropTypes.func.isRequired,
   selectedOption: PropTypes.number,
   changeSearchIndexSelected: PropTypes.func,
+  handleOptionDelete: PropTypes.func,
   refInput: PropTypes.func
 }
 

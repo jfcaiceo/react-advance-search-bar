@@ -4,6 +4,16 @@ import { getInputDisplayName } from './InputOption.jsx';
 import './Input.css';
 
 export default class Input extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInputRef = null;
+    this.triggerInputStart = this.triggerInputStart.bind(this);
+  }
+
+  componentDidMount() {
+    this.triggerInputStart();
+  }
+
   onChange(event) {
     this.props.onInputChange(event.target.value, this.props.inputOption);
   }
@@ -13,6 +23,15 @@ export default class Input extends React.Component {
       this.props.triggerInputEnd()
       return false;
     }
+  }
+
+  setTextInputRef(element) {
+    this.textInputRef = element;
+  }
+
+  triggerInputStart() {
+    if(this.textInputRef)
+      this.textInputRef.focus();
   }
 
   render() {
@@ -28,7 +47,8 @@ export default class Input extends React.Component {
                 value={this.props.value}
                 size={size}
                 onChange={this.onChange.bind(this)}
-                onKeyPress={this.onKeyPress.bind(this)}/>
+                onKeyPress={this.onKeyPress.bind(this)}
+                ref={this.setTextInputRef.bind(this)}/>
       </React.Fragment>
     )
   }

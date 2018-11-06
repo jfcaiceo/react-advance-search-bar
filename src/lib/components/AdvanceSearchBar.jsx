@@ -33,7 +33,7 @@ export default class AdvanceSearchBar extends React.Component {
       if(value && hasOptions) {
         this.handleInputEnd();
       }
-    }, 50);
+    }, 100);
   }
 
   handleInputTextChange(event) {
@@ -59,13 +59,30 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   handleOptionSelect(selectedOption) {
+    if(!selectedOption) {
+      return;
+    }
     let selectedOptionsCopy = this.state.selectedOptions
     selectedOptionsCopy[selectedOption.props.name] = '';
 
     this.setState({
       searchInputValue: '',
+      searchIndexSelected: 0,
       currentSelectedOption: selectedOption,
       selectedOptions: selectedOptionsCopy
+    })
+  }
+
+  handleOptionDelete() {
+    let selectedOptions = this.state.selectedOptions;
+    let keys = Object.keys(selectedOptions);
+    if(keys.length == 0) {
+      return;
+    }
+    delete selectedOptions[keys[keys.length - 1]]
+    this.setState({
+      currentSelectedOption: null,
+      selectedOptions: selectedOptions
     })
   }
 
@@ -88,11 +105,11 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   triggerInputEnd() {
-    if(this.textInputRef);
+    if(this.textInputRef)
       this.textInputRef.focus();
   }
 
-  getCurrentTags() {
+  getCurrentTags(optionList) {
     let inputs = [];
 
     for (let [key, value] of Object.entries(this.state.selectedOptions)) {
@@ -117,8 +134,11 @@ export default class AdvanceSearchBar extends React.Component {
                                 onOptionSelect={this.handleOptionSelect}
                                 selectedOption={this.state.searchIndexSelected}
                                 changeSearchIndexSelected={this.changeSearchIndexSelected.bind(this)}
+                                handleOptionDelete={this.handleOptionDelete.bind(this)}
                                 refInput={this.setTextInputRef.bind(this)}
-                                key="search-bar-input-text"/>
+                                key="search-bar-input-text">
+        { optionList }
+      </InputOptionListTextField>
     );
     return inputs;
   }
@@ -140,18 +160,19 @@ export default class AdvanceSearchBar extends React.Component {
 
   render() {
     let list;
+    let optionList = this.getCurrentInputOptionList()
     if (this.state.isSearching) {
       list = <InputOptionList onOptionSelect={this.handleOptionSelect}
                               currentSearchingKey={this.state.searchInputValue}
                               changeSearchIndexSelected={this.changeSearchIndexSelected.bind(this)}
                               selectedOption={this.state.searchIndexSelected}>
-               { this.getCurrentInputOptionList() }
+               { optionList }
              </InputOptionList>
     }
     return (
       <div className="search-bar">
         <div className={`search-bar__container ${ this.state.focus ? 'search-bar__container--focus' : '' }`}>
-          { this.getCurrentTags() }
+          { this.getCurrentTags(optionList) }
         </div>
         <label className={`search-bar__label ${ this.state.focus ? 'search-bar__label--float' : '' }`}>Advance Search</label>
         { list }
