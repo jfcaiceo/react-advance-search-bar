@@ -1,5 +1,6 @@
 import React from 'react';
 import InputOptionList from './InputOptionList.jsx';
+import InputOptionListTextField from './InputOptionListTextField.jsx';
 import Input from './Input.jsx';
 import './AdvanceSearchBar.css';
 
@@ -37,7 +38,8 @@ export default class AdvanceSearchBar extends React.Component {
 
   handleInputTextChange(event) {
     this.setState({
-      searchInputValue: event.target.value
+      searchInputValue: event.target.value,
+      searchIndexSelected: 0
     })
   }
 
@@ -86,7 +88,7 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   triggerInputEnd() {
-    if(this.textInputRef)
+    if(this.textInputRef);
       this.textInputRef.focus();
   }
 
@@ -109,14 +111,14 @@ export default class AdvanceSearchBar extends React.Component {
       )
     }
     inputs.push(
-      <input type="text"
-              className="search-bar__base-text-field"
-              onFocus={this.changeFocus.bind(this, true)}
-              onBlur={this.changeFocus.bind(this, false)}
-              value={this.state.searchInputValue}
-              onChange={this.handleInputTextChange.bind(this)}
-              ref={this.setTextInputRef.bind(this)}
-              key="search-bar-input-text"/>
+      <InputOptionListTextField focusChangeHandler={this.changeFocus.bind(this)}
+                                value={this.state.searchInputValue}
+                                onChange={this.handleInputTextChange.bind(this)}
+                                onOptionSelect={this.handleOptionSelect}
+                                selectedOption={this.state.searchIndexSelected}
+                                changeSearchIndexSelected={this.changeSearchIndexSelected.bind(this)}
+                                refInput={this.setTextInputRef.bind(this)}
+                                key="search-bar-input-text"/>
     );
     return inputs;
   }
