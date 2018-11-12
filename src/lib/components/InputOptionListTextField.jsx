@@ -7,10 +7,20 @@ import './InputOptionListTextField.css'
 export default class InputOptionListTextField extends React.Component {
   constructor(props) {
     super(props);
+    this.onArrowUp = this.onArrowUp.bind(this);
+    this.onArrowDown = this.onArrowDown.bind(this);
+    this.onEnter = this.onEnter.bind(this);
+    this.onBackspace = this.onBackspace.bind(this);
   }
 
   changeFocus(value) {
-    this.props.focusChangeHandler(value);
+    if(!value) {
+      setTimeout(() => {
+        this.props.focusChangeHandler(value);
+      }, 100);
+    } else {
+      this.props.focusChangeHandler(value);
+    }
   }
 
   shouldComponentUpdate(prevProps) {
@@ -18,21 +28,44 @@ export default class InputOptionListTextField extends React.Component {
   }
 
   onKeyPress(event) {
-    if (event.key === 'ArrowUp') {
-      this.props.changeSearchIndexSelected(Math.max(0, this.props.selectedOption - 1));
-    } else if (event.key === 'ArrowDown') {
-      let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
-      this.props.changeSearchIndexSelected(Math.min(options.length - 1, this.props.selectedOption + 1));
-    } else if (event.key === 'Enter') {
-      let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
-      setTimeout(() => {
-        this.props.onOptionSelect(options[this.props.selectedOption]);
-      }, 10);
-      return false;
-    }  else if (event.key === 'Backspace') {
-      if(this.props.value.length == 0) {
-        this.props.handleOptionDelete();
-      }
+    switch(event.key) {
+      case 'ArrowUp':
+        this.onArrowUp();
+        break;
+      case 'ArrowDown':
+        this.onArrowDown();
+        break;
+      case 'Enter':
+        this.onEnter(event);
+        break;
+      case 'Tab':
+        this.onEnter(event);
+        break;
+      case 'Backspace':
+        this.onBackspace();
+        break;
+    }
+  }
+
+  onArrowUp() {
+    this.props.changeSearchIndexSelected(Math.max(0, this.props.selectedOption - 1));
+  }
+
+  onArrowDown() {
+    let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
+    this.props.changeSearchIndexSelected(Math.min(options.length - 1, this.props.selectedOption + 1));
+  }
+
+  onEnter(event) {
+    event.preventDefault();
+    let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
+
+    this.props.onOptionSelect(options[this.props.selectedOption]);
+  }
+
+  onBackspace() {
+    if(this.props.value.length === 0) {
+      this.props.handleOptionDelete();
     }
   }
 
@@ -53,12 +86,10 @@ export default class InputOptionListTextField extends React.Component {
 InputOptionListTextField.propTypes = {
   focusChangeHandler: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
   onOptionSelect: PropTypes.func.isRequired,
-  selectedOption: PropTypes.number,
-  changeSearchIndexSelected: PropTypes.func,
-  handleOptionDelete: PropTypes.func,
-  refInput: PropTypes.func
+  changeSearchIndexSelected: PropTypes.func.isRequired,
+  handleOptionDelete: PropTypes.func.isRequired,
+  refInput: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+  selectedOption: PropTypes.number
 }
-
-

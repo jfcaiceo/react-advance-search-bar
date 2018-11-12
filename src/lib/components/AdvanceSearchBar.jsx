@@ -23,17 +23,15 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   changeFocus(value) {
-    setTimeout( () => {
-      let hasValue = !!this.state.searchInputValue;
-      let hasOptions = Object.keys(this.state.selectedOptions).length > 0;
-      this.setState({
-        focus: (hasValue || hasOptions || value),
-        isSearching: (hasValue || value)
-      });
-      if(value && hasOptions) {
-        this.handleInputEnd();
-      }
-    }, 100);
+    let hasValue = !!this.state.searchInputValue;
+    let hasOptions = Object.keys(this.state.selectedOptions).length > 0;
+    this.setState({
+      focus: (hasValue || hasOptions || value),
+      isSearching: true//(hasValue || value)
+    });
+    if(value && hasOptions) {
+      this.handleInputEnd();
+    }
   }
 
   handleInputTextChange(event) {
@@ -76,7 +74,7 @@ export default class AdvanceSearchBar extends React.Component {
   handleOptionDelete() {
     let selectedOptions = this.state.selectedOptions;
     let keys = Object.keys(selectedOptions);
-    if(keys.length == 0) {
+    if(keys.length === 0) {
       return;
     }
     delete selectedOptions[keys[keys.length - 1]]

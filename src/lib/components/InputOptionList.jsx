@@ -23,6 +23,7 @@ export default class InputOptionList extends React.Component {
   constructor(props) {
     super(props);
     this.renderOptions = this.renderOptions.bind(this);
+    this.divRef = null;
   }
 
   onClickOption(inputOption) {
@@ -33,6 +34,33 @@ export default class InputOptionList extends React.Component {
     this.props.changeSearchIndexSelected(index)
   }
 
+  setDivRef(element) {
+    this.divRef = element;
+  }
+
+  shouldComponentUpdate(prevProps) {
+    return (
+      prevProps.currentSearchingKey !== this.props.currentSearchingKey ||
+      prevProps.selectedOption !== this.props.selectedOption
+    )
+  }
+
+  componentDidUpdate() {
+    if(this.divRef) {
+      let lowCurrentIndex = parseInt(this.divRef.scrollTop / listElementHeight);
+      let maxCurrentIndex = lowCurrentIndex + minShowingElements;
+
+      if (this.props.selectedOption <= lowCurrentIndex) {
+        let scrollPixels = this.props.selectedOption * listElementHeight;
+        this.divRef.scrollTop = scrollPixels;
+      } else if (this.props.selectedOption >= maxCurrentIndex) {
+        let element = this.props.selectedOption + 1 - minShowingElements;
+        let scrollPixels = element * listElementHeight;
+        this.divRef.scrollTop = scrollPixels;
+      }
+    }
+  }
+
   renderOptions() {
     let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.currentSearchingKey);
     options = options.map((inputOption, i) => {
@@ -40,7 +68,8 @@ export default class InputOptionList extends React.Component {
       return (
         <li onClick={this.onClickOption.bind(this, inputOption)}
             onMouseEnter={this.onHover.bind(this, i)}
-            className={`${this.props.selectedOption === i ? 'search-bar__input-options-list-li--active' : ''}`}>
+            className={`${this.props.selectedOption === i ? 'search-bar__input-options-list-li--active' : ''}`}
+            key={inputOption.props.name}>
           { text }
         </li>
       );
@@ -58,7 +87,8 @@ export default class InputOptionList extends React.Component {
     const elementsToShow = Math.min(minShowingElements, React.Children.count(this.props.children));
     return (
       <div className="search-bar__input-options-list"
-           style={{minHeight: `${elementsToShow * listElementHeight + listPadding}px`}}>
+           style={{minHeight: `${elementsToShow * listElementHeight + listPadding}px`}}
+           ref={this.setDivRef.bind(this)}>
         <ul>
           {this.renderOptions()}
         </ul>
@@ -71,7 +101,7 @@ export { getFilteredChildren };
 
 InputOptionList.propTypes = {
   onOptionSelect: PropTypes.func.isRequired,
+  changeSearchIndexSelected: PropTypes.func.isRequired,
   currentSearchingKey: PropTypes.string,
-  changeSearchIndexSelected: PropTypes.func,
   selectedOption: PropTypes.number
 }

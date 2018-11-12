@@ -20,8 +20,12 @@ export default class Input extends React.Component {
 
   onKeyPress(event) {
     if (event.key === 'Enter') {
+      event.preventDefault();
       this.props.triggerInputEnd()
-      return false;
+    } else if (event.key === 'Backspace') {
+      if (this.props.value.length === 0) {
+        this.props.triggerInputEnd()
+      }
     }
   }
 
@@ -47,7 +51,7 @@ export default class Input extends React.Component {
                 value={this.props.value}
                 size={size}
                 onChange={this.onChange.bind(this)}
-                onKeyPress={this.onKeyPress.bind(this)}
+                onKeyDown={this.onKeyPress.bind(this)}
                 ref={this.setTextInputRef.bind(this)}/>
       </React.Fragment>
     )
