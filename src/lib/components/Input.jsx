@@ -11,7 +11,15 @@ export default class Input extends React.Component {
   }
 
   componentDidMount() {
-    this.triggerInputStart();
+    if(this.props.value.length === 0){
+      this.triggerInputStart();
+    }
+  }
+
+  shouldComponentUpdate(prevProps) {
+    return (
+      prevProps.value !== this.props.value
+    )
   }
 
   onChange(event) {
@@ -34,26 +42,25 @@ export default class Input extends React.Component {
   }
 
   triggerInputStart() {
-    if(this.textInputRef)
+    if(this.textInputRef) {
       this.textInputRef.focus();
+    }
   }
 
   render() {
     const size = Math.max(this.props.value.length, 1);
     return (
-      <React.Fragment>
-        <div className="search-bar__input-tag">
+      <div className="search-bar__input-tag">
+        <span>
           { getInputDisplayName(this.props.inputOption) }
-        </div>
+        </span>
         <input type="text"
-                autoFocus={this.props.active}
-                className="search-bar__input"
                 value={this.props.value}
                 size={size}
                 onChange={this.onChange.bind(this)}
                 onKeyDown={this.onKeyPress.bind(this)}
                 ref={this.setTextInputRef.bind(this)}/>
-      </React.Fragment>
+      </div>
     )
   }
 }
@@ -62,6 +69,5 @@ Input.propTypes = {
   onInputChange: PropTypes.func.isRequired,
   triggerInputEnd: PropTypes.func.isRequired,
   inputOption: PropTypes.instanceOf(Object).isRequired,
-  active: PropTypes.bool,
   value: PropTypes.string
 }

@@ -14,17 +14,14 @@ export default class InputOptionListTextField extends React.Component {
   }
 
   changeFocus(value) {
-    if(!value) {
-      setTimeout(() => {
-        this.props.focusChangeHandler(value);
-      }, 100);
-    } else {
-      this.props.focusChangeHandler(value);
-    }
+    this.props.focusChangeHandler(value);
   }
 
   shouldComponentUpdate(prevProps) {
-    return prevProps.value !== this.props.value
+    return (
+      prevProps.value !== this.props.value ||
+      prevProps.disabled !== this.props.disabled
+    )
   }
 
   onKeyPress(event) {
@@ -60,7 +57,11 @@ export default class InputOptionListTextField extends React.Component {
     event.preventDefault();
     let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value)
 
-    this.props.onOptionSelect(options[this.props.selectedOption]);
+    if(options.length === 0) {
+      this.props.changeHelperDisplay(true)
+    } else {
+      this.props.onOptionSelect(options[this.props.selectedOption]);
+    }
   }
 
   onBackspace() {
@@ -76,6 +77,7 @@ export default class InputOptionListTextField extends React.Component {
               onFocus={this.changeFocus.bind(this, true)}
               onBlur={this.changeFocus.bind(this, false)}
               value={this.props.value}
+              disabled={this.props.disabled}
               onChange={this.props.onChange.bind(this)}
               onKeyDown={this.onKeyPress.bind(this)}
               ref={this.props.refInput}/>
@@ -89,7 +91,9 @@ InputOptionListTextField.propTypes = {
   onOptionSelect: PropTypes.func.isRequired,
   changeSearchIndexSelected: PropTypes.func.isRequired,
   handleOptionDelete: PropTypes.func.isRequired,
+  changeHelperDisplay: PropTypes.func.isRequired,
   refInput: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
-  selectedOption: PropTypes.number
+  selectedOption: PropTypes.number,
+  disabled: PropTypes.bool
 }

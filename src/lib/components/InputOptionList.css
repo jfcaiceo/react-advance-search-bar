@@ -5,7 +5,13 @@
   border-radius: 4px;
   overflow: auto;
   z-index: 4;
-  margin-top: 8px;
+  background-color: white;
+}
+
+.search-bar__input-options-list--absolute {
+  position: absolute;
+  top: 60px;
+  width: 100%;
 }
 
 .search-bar__input-options-list ul {

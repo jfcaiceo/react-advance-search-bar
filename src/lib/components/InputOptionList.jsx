@@ -26,7 +26,8 @@ export default class InputOptionList extends React.Component {
     this.divRef = null;
   }
 
-  onClickOption(inputOption) {
+  onClickOption(inputOption, event) {
+    event.preventDefault();
     this.props.onOptionSelect(inputOption);
   }
 
@@ -66,7 +67,7 @@ export default class InputOptionList extends React.Component {
     options = options.map((inputOption, i) => {
       let text = getInputDisplayName(inputOption);
       return (
-        <li onClick={this.onClickOption.bind(this, inputOption)}
+        <li onMouseDown={this.onClickOption.bind(this, inputOption)}
             onMouseEnter={this.onHover.bind(this, i)}
             className={`${this.props.selectedOption === i ? 'search-bar__input-options-list-li--active' : ''}`}
             key={inputOption.props.name}>
@@ -77,7 +78,7 @@ export default class InputOptionList extends React.Component {
 
     if (options.length === 0) {
       options.push(
-        <li>No tags matched</li>
+        <li key="no_tag">{this.props.notTagFound}</li>
       )
     }
     return options;
@@ -86,7 +87,7 @@ export default class InputOptionList extends React.Component {
   render() {
     const elementsToShow = Math.min(minShowingElements, React.Children.count(this.props.children));
     return (
-      <div className="search-bar__input-options-list"
+      <div className={`search-bar__input-options-list ${this.props.positionAbsolute ? 'search-bar__input-options-list--absolute' : ''}`}
            style={{minHeight: `${elementsToShow * listElementHeight + listPadding}px`}}
            ref={this.setDivRef.bind(this)}>
         <ul>
@@ -103,5 +104,12 @@ InputOptionList.propTypes = {
   onOptionSelect: PropTypes.func.isRequired,
   changeSearchIndexSelected: PropTypes.func.isRequired,
   currentSearchingKey: PropTypes.string,
-  selectedOption: PropTypes.number
+  selectedOption: PropTypes.number,
+  positionAbsolute: PropTypes.bool,
+  notTagFound: PropTypes.string
+}
+
+InputOptionList.defaultProps = {
+  positionAbsolute: true,
+  notTagFound: ''
 }

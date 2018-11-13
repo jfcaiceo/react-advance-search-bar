@@ -3,12 +3,12 @@ import { AdvanceSearchBar, InputOption } from '../lib';
 
 const App = () => (
   <div>
-    <AdvanceSearchBar>
-      <InputOption name="first_option" label="First input"/>
-      <InputOption name="second_option" label="Second input"/>
-      <InputOption name="third_option" label="Third input"/>
-      <InputOption name="fourth_option" label="Fourth input"/>
-      <InputOption name="fifth_option" label="Fifth input"/>
+    <AdvanceSearchBar callback={(params) => {alert(`Searching parameters\n${Object.keys(params).reduce((memo, key) => {return memo + `${key}: ${params[key]}\n`},'')}`)}}>
+      <InputOption name="first_option" label="First Option"/>
+      <InputOption name="second_option" label="Second Option"/>
+      <InputOption name="third_option" label="Third Option"/>
+      <InputOption name="fourth_option" label="Fouth Option"/>
+      <InputOption name="fifth_option" label="Fifth Option"/>
     </AdvanceSearchBar>
   </div>
 );
