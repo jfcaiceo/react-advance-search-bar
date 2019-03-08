@@ -67,6 +67,8 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   changeSearchIndexSelected (value) {
+    if (this.state.value === value) return false;
+
     this.setState({
       searchIndexSelected: value
     });
