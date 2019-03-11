@@ -44,7 +44,8 @@ export default class InputOptionList extends React.Component {
   shouldComponentUpdate (prevProps) {
     return (
       prevProps.currentSearchingKey !== this.props.currentSearchingKey ||
-      prevProps.selectedOption !== this.props.selectedOption
+      prevProps.selectedOption !== this.props.selectedOption ||
+      prevProps.children !== this.props.children
     );
   }
 
