@@ -73,12 +73,12 @@ export default class InputOptionListHelper extends React.Component {
 
   onEnter (event) {
     event.preventDefault();
-    let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value);
-
+    let options = React.Children.toArray(this.props.children);
+    if (this.props.selectedOption == null) return;
     if (options.length === 0) {
       this.props.changeHelperDisplay(true);
     } else {
-      this.props.onOptionSelect(options[this.props.selectedOption]);
+      this.handleOptionSelect(options[this.props.selectedOption]);
     }
   }
 
