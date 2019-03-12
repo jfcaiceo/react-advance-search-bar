@@ -218,7 +218,7 @@ export default class AdvanceSearchBar extends React.Component {
         <button className={`search-bar__button ${searchValid ? 'search-bar__button--active' : ''} ${this.state.focus ? 'search-bar__button--active-border' : ''}`}
           disabled={!searchValid}
           onClick={this.triggerSearch}>{this.props.buttonText}</button>
-        <label className={`search-bar__label ${this.state.focus ? 'search-bar__label--float' : ''}`}>{this.props.labelText}</label>
+        { this.props.labelText && <label className={`search-bar__label ${this.state.focus ? 'search-bar__label--float' : ''}`}>{this.props.labelText}</label> }
         { list }
       </div>
     );
