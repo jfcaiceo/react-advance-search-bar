@@ -69,7 +69,7 @@ export default class InputOptionList extends React.Component {
     options = options.map((inputOption, i) => {
       let text = getInputDisplayName(inputOption);
       return (
-        <li onMouseDown={() => this.onClickOption(inputOption)}
+        <li onMouseDown={(e) => { this.onClickOption(inputOption, e); }}
           onMouseEnter={() => this.onHover(i)}
           className={`${this.props.selectedOption === i ? 'search-bar__input-options-list-li--active' : ''}`}
           key={inputOption.props.name}>
