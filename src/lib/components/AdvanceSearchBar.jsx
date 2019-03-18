@@ -107,6 +107,11 @@ export default class AdvanceSearchBar extends React.Component {
     delete selectedOptions[keys[keys.length - 1]];
     this.setState({
       selectedOptions: selectedOptions
+    }, () => {
+      const selectedOptions = Object.keys(this.state.selectedOptions);
+      if (!selectedOptions.length) {
+        this.triggerEmptyState();
+      }
     });
   }
 
@@ -120,6 +125,11 @@ export default class AdvanceSearchBar extends React.Component {
 
     this.setState({
       selectedOptions: selectedOptions
+    }, () => {
+      const selectedOptions = Object.keys(this.state.selectedOptions);
+      if (!selectedOptions.length) {
+        this.triggerEmptyState();
+      }
     });
   }
 
@@ -135,6 +145,10 @@ export default class AdvanceSearchBar extends React.Component {
 
   triggerSearch () {
     this.props.callback(this.state.selectedOptions);
+  }
+
+  triggerEmptyState () {
+    this.props.emptyCallback();
   }
 
   getCurrentTags (optionList) {
@@ -227,6 +241,7 @@ export default class AdvanceSearchBar extends React.Component {
 
 AdvanceSearchBar.propTypes = {
   callback: PropTypes.func.isRequired,
+  emptyCallback: PropTypes.func,
   children: PropTypes.node.isRequired,
   labelText: PropTypes.string,
   buttonText: PropTypes.string,
