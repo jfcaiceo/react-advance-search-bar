@@ -22,7 +22,7 @@ export default class AdvanceSearchBar extends React.Component {
     this.handleOptionDelete = this.handleOptionDelete.bind(this);
     this.changeHelperDisplay = this.changeHelperDisplay.bind(this);
     this.triggerSearch = this.triggerSearch.bind(this);
-
+    this.handleClean = this.handleClean.bind(this);
     this.setTextInputRef = this.setTextInputRef.bind(this);
     this.textInputRef = null;
     this.state = {
@@ -133,6 +133,13 @@ export default class AdvanceSearchBar extends React.Component {
     });
   }
 
+  handleClean () {
+    this.setState({
+      selectedOptions: {},
+      searchInputValue: ''
+    }, () => { this.triggerEmptyState(); });
+  }
+
   setTextInputRef (element) {
     this.textInputRef = element;
   }
@@ -179,6 +186,15 @@ export default class AdvanceSearchBar extends React.Component {
         { optionList }
       </InputOptionListTextField>
     );
+
+    if (inputs.length > 1 || this.state.searchInputValue.length >= 1) {
+      inputs.push(
+        <div className='search-bar__clean'onClick={this.handleClean} key='search-bar-clean'>
+          <svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'><path fill='none' d='M0 0h24v24H0V0z' /><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z' /></svg>
+        </div>
+      );
+    }
+
     return inputs;
   }
 

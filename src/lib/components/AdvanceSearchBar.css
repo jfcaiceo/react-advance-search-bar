@@ -103,3 +103,9 @@
   color: white;
   cursor: pointer;
 }
+
+.search-bar__clean {
+  margin-top: 12px;
+  margin-right: 6px;
+  cursor: pointer;
+}
