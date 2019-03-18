@@ -15,6 +15,7 @@
 .search-bar__container {
   display: inline-flex;
   border: 1px var(--inactive-color) solid;
+  background: white;
   min-height: 56px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
