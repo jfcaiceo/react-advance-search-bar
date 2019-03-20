@@ -109,3 +109,15 @@
   margin-right: 6px;
   cursor: pointer;
 }
+
+.helper-title {
+  color: #555;
+  font-size: .95em;
+  font-weight: normal;
+}
+
+.helper-title__word {
+  color: #000;
+  font-size: 1em;
+  font-weight: bold;
+}

@@ -98,12 +98,14 @@ export default class InputOptionListHelper extends React.Component {
   }
 
   render () {
+    const helperTitle = this.props.helperTitleFunction(this.props.value);
+
     return (
       <div className='search-bar__input-options-list-helper'>
         <div className='search-bar__input-options-list-helper-backdrop'
           onClick={() => this.props.changeHelperDisplay(false)} />
         <div className='search-bar__input-options-list-helper-modal' tabIndex='0' ref={ref => { this.ref = ref; }}>
-          <h3>{this.props.helperTitle}</h3>
+          <h3>{helperTitle}</h3>
           <InputOptionList onOptionSelect={this.handleOptionSelect}
             currentSearchingKey=''
             changeSearchIndexSelected={this.props.changeSearchIndexSelected}
@@ -122,9 +124,9 @@ InputOptionListHelper.propTypes = {
   handleOptionDelete: PropTypes.func.isRequired,
   handleOptionSelect: PropTypes.func.isRequired,
   changeHelperDisplay: PropTypes.func.isRequired,
+  helperTitleFunction: PropTypes.func.isRequired,
   changeSearchIndexSelected: PropTypes.func,
   selectedOption: PropTypes.number,
-  helperTitle: PropTypes.string,
   helperTextButton: PropTypes.string,
   value: PropTypes.string,
   children: PropTypes.node

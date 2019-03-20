@@ -227,7 +227,7 @@ export default class AdvanceSearchBar extends React.Component {
         changeHelperDisplay={this.changeHelperDisplay}
         value={this.state.searchInputValue}
         selectedOption={this.state.searchIndexSelected}
-        helperTitle={this.props.helperTitle}
+        helperTitleFunction={this.props.helperTitleFunction}
         helperTextButton={this.props.helperTextButton}>
         { optionList }
       </InputOptionListHelper>;
@@ -258,11 +258,11 @@ export default class AdvanceSearchBar extends React.Component {
 AdvanceSearchBar.propTypes = {
   callback: PropTypes.func.isRequired,
   emptyCallback: PropTypes.func,
+  helperTitleFunction: PropTypes.func,
   children: PropTypes.node.isRequired,
   labelText: PropTypes.string,
   buttonText: PropTypes.string,
   notTagFound: PropTypes.string,
-  helperTitle: PropTypes.string,
   helperTextButton: PropTypes.string
 };
 
@@ -270,6 +270,11 @@ AdvanceSearchBar.defaultProps = {
   labelText: 'Advance Search',
   buttonText: 'Search',
   notTagFound: 'No tags matched',
-  helperTitle: 'Please enter the field you are looking for',
-  helperTextButton: 'Cancel'
+  helperTextButton: 'Cancel',
+  helperTitleFunction: (word) => (
+    <div className='helper-title'>
+      You have written: <span className='helper-title__word'>{word}</span>.<br />
+      Please enter the field in which you are looking for
+    </div>
+  )
 };
