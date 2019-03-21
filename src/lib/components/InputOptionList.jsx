@@ -23,6 +23,7 @@ export default class InputOptionList extends React.Component {
   constructor (props) {
     super(props);
     this.renderOptions = this.renderOptions.bind(this);
+    this.renderSuboptions = this.renderSuboptions.bind(this);
     this.onClickOption = this.onClickOption.bind(this);
     this.onHover = this.onHover.bind(this);
     this.divRef = null;
@@ -45,7 +46,8 @@ export default class InputOptionList extends React.Component {
     return (
       prevProps.currentSearchingKey !== this.props.currentSearchingKey ||
       prevProps.selectedOption !== this.props.selectedOption ||
-      prevProps.children !== this.props.children
+      prevProps.children !== this.props.children ||
+      prevProps.showInfoFor !== this.props.showInfoFor
     );
   }
 
@@ -65,16 +67,25 @@ export default class InputOptionList extends React.Component {
     }
   }
 
+  renderSuboptions (inputOption) {
+    const suboptions = inputOption.props.options.map(option => option.label || option.name).join(', ');
+    return (
+      <span className='input-options-list__suboptions'>| Valid Values: {suboptions}</span>
+    );
+  }
+
   renderOptions () {
     let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.currentSearchingKey);
     options = options.map((inputOption, i) => {
-      let text = getInputDisplayName(inputOption);
+      const text = getInputDisplayName(inputOption);
+      const showSuboptions = this.props.showInfoFor === inputOption.props.name && inputOption.props.options;
+
       return (
         <li onMouseDown={(e) => { this.onClickOption(inputOption, e); }}
           onMouseEnter={() => this.onHover(i)}
           className={`${this.props.selectedOption === i ? 'search-bar__input-options-list-li--active' : ''}`}
           key={inputOption.props.name}>
-          { text }
+          { text } {showSuboptions && this.renderSuboptions(inputOption)}
         </li>
       );
     });
@@ -110,7 +121,8 @@ InputOptionList.propTypes = {
   selectedOption: PropTypes.number,
   positionAbsolute: PropTypes.bool,
   notTagFound: PropTypes.string,
-  children: PropTypes.node
+  children: PropTypes.node,
+  showInfoFor: PropTypes.string
 };
 
 InputOptionList.defaultProps = {

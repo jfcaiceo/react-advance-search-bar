@@ -7,6 +7,10 @@ import './InputOptionListHelper.css';
 export default class InputOptionListHelper extends React.Component {
   constructor (props) {
     super(props);
+    this.state = {
+      showInfoFor: null
+    };
+
     this.handleOptionSelect = this.handleOptionSelect.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onArrowUp = this.onArrowUp.bind(this);
@@ -17,8 +21,16 @@ export default class InputOptionListHelper extends React.Component {
   }
 
   handleOptionSelect (optionSelect) {
-    this.props.handleOptionSelect(optionSelect, this.props.value);
-    this.props.changeHelperDisplay(false);
+    const suboption = optionSelect.props.options && optionSelect.props.options.find(option => option.label === this.props.value);
+
+    if (!optionSelect.props.options || suboption) {
+      this.props.handleOptionSelect(optionSelect, (suboption && suboption.name) || this.props.value);
+      this.props.changeHelperDisplay(false);
+    } else {
+      this.setState({
+        showInfoFor: optionSelect.props.options ? optionSelect.props.name : null
+      });
+    }
   }
 
   onKeyPress (event) {
@@ -110,7 +122,8 @@ export default class InputOptionListHelper extends React.Component {
             currentSearchingKey=''
             changeSearchIndexSelected={this.props.changeSearchIndexSelected}
             selectedOption={this.props.selectedOption}
-            positionAbsolute={false}>
+            positionAbsolute={false}
+            showInfoFor={this.state.showInfoFor}>
             { this.props.children }
           </InputOptionList>
           <button onClick={() => this.props.changeHelperDisplay(false)}>{this.props.helperTextButton}</button>

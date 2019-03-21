@@ -50,6 +50,38 @@ export default class Input extends React.Component {
     this.textInputRef = element;
   }
 
+  getSelect () {
+    const suboptions = this.props.inputOption.props.options.map(opt => (
+      <option value={opt.name} key={opt.name}>
+        {opt.label}
+      </option>
+    ));
+
+    return (
+      <select value={this.props.value}
+        onChange={this.onChange}
+        onKeyDown={this.onKeyPress}
+        ref={this.setTextInputRef.bind(this)}
+      >
+        {!this.props.value && <option value='' />}
+        {suboptions}
+      </select>
+    );
+  }
+
+  getInput () {
+    const size = Math.max(this.props.value.length, 1);
+
+    return (
+      <input type='text'
+        value={this.props.value}
+        size={size}
+        onChange={this.onChange}
+        onKeyDown={this.onKeyPress}
+        ref={this.setTextInputRef.bind(this)} />
+    );
+  }
+
   triggerInputStart () {
     if (this.textInputRef) {
       this.textInputRef.focus();
@@ -57,19 +89,15 @@ export default class Input extends React.Component {
   }
 
   render () {
-    const size = Math.max(this.props.value.length, 1);
+    const isSelect = this.props.inputOption.props.options && this.props.inputOption.props.options.length >= 1;
+
     return (
       <div className='search-bar__input-tag'>
         <span className='input-tag__start'>
           { getInputDisplayName(this.props.inputOption) }
         </span>
         <span className='input-tag__second'>
-          <input type='text'
-            value={this.props.value}
-            size={size}
-            onChange={this.onChange}
-            onKeyDown={this.onKeyPress}
-            ref={this.setTextInputRef.bind(this)} />
+          { isSelect ? this.getSelect() : this.getInput() }
           <DeleteIcon className='input-tag__delete' width='14' height='14' onClick={this.onDelete} />
         </span>
       </div>
@@ -81,5 +109,6 @@ Input.propTypes = {
   onInputChange: PropTypes.func.isRequired,
   triggerInputEnd: PropTypes.func.isRequired,
   inputOption: PropTypes.instanceOf(Object).isRequired,
+  options: PropTypes.array,
   value: PropTypes.string
 };

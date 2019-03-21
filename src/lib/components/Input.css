@@ -36,7 +36,7 @@
   background-color: #e0e0e0;
 }
 
-.input-tag__second input {
+.input-tag__second input, .input-tag__second select {
   font-family: Roboto,sans-serif;
   font-size: .875rem;
   background-color: #e0e0e0;
@@ -45,7 +45,7 @@
   cursor: pointer;
 }
 
-.input-tag__second input:focus {
+.input-tag__second input:focus, .input-tag__second select:focus {
     outline: none;
 }
 
