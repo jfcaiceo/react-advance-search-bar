@@ -110,6 +110,14 @@
   cursor: pointer;
 }
 
+.search-bar__clean svg path {
+  fill: #777;
+}
+
+.search-bar__clean:hover svg path {
+    fill: #333;
+}
+
 .helper-title {
   color: #555;
   font-size: .95em;

@@ -52,8 +52,7 @@
 .input-tag__delete {
   text-align: center;
   display: inline-block;
-  background: #BBB;
-  color: white;
+  background: #bbb;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -62,8 +61,16 @@
   text-transform: inherit;
 }
 
-.input-tag-delete__icon {
+.input-tag__delete svg {
   height: 14px;
   position: relative;
   top: 1px;
+}
+
+.input-tag__delete svg path {
+  fill: #777;
+}
+
+.input-tag__delete:hover svg path {
+    fill: #333;
 }
