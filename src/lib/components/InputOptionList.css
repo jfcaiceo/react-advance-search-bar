@@ -10,7 +10,7 @@
 
 .search-bar__input-options-list--absolute {
   position: absolute;
-  top: 60px;
+  top: calc(var(--search-bar-height) + var(--search-bar-label-height) + 2px);
   width: 100%;
 }
 

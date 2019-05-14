@@ -9,7 +9,7 @@
   font-weight: 400;
   letter-spacing: .00937em;
   border: none;
-  min-height: 48px;
   vertical-align: top;
   width: 100%;
+  background-color: transparent;
 }
