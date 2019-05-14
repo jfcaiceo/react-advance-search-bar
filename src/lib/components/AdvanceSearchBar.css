@@ -15,6 +15,7 @@
 .search-bar__container {
   display: inline-flex;
   border: 1px var(--inactive-color) solid;
+  background: white;
   min-height: 56px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -101,4 +102,30 @@
   background-color: var(--active-color);
   color: white;
   cursor: pointer;
+}
+
+.search-bar__clean {
+  margin-top: 12px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+.search-bar__clean svg path {
+  fill: #777;
+}
+
+.search-bar__clean:hover svg path {
+    fill: #333;
+}
+
+.helper-title {
+  color: #555;
+  font-size: .95em;
+  font-weight: normal;
+}
+
+.helper-title__word {
+  color: #000;
+  font-size: 1em;
+  font-weight: bold;
 }

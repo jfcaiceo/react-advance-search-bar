@@ -4,6 +4,7 @@ import InputOptionList from './InputOptionList.jsx';
 import InputOptionListTextField from './InputOptionListTextField.jsx';
 import InputOptionListHelper from './InputOptionListHelper.jsx';
 import Input from './Input.jsx';
+import DeleteIcon from './DeleteIcon.jsx';
 import './AdvanceSearchBar.css';
 
 export default class AdvanceSearchBar extends React.Component {
@@ -22,8 +23,10 @@ export default class AdvanceSearchBar extends React.Component {
     this.handleOptionDelete = this.handleOptionDelete.bind(this);
     this.changeHelperDisplay = this.changeHelperDisplay.bind(this);
     this.triggerSearch = this.triggerSearch.bind(this);
-
+    this.handleClean = this.handleClean.bind(this);
     this.setTextInputRef = this.setTextInputRef.bind(this);
+    this.showHelper = this.showHelper.bind(this);
+    this.handleSearchButton = this.handleSearchButton.bind(this);
     this.textInputRef = null;
     this.state = {
       focus: false,
@@ -67,6 +70,8 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   changeSearchIndexSelected (value) {
+    if (this.state.value === value) return false;
+
     this.setState({
       searchIndexSelected: value
     });
@@ -105,6 +110,11 @@ export default class AdvanceSearchBar extends React.Component {
     delete selectedOptions[keys[keys.length - 1]];
     this.setState({
       selectedOptions: selectedOptions
+    }, () => {
+      const selectedOptions = Object.keys(this.state.selectedOptions);
+      if (!selectedOptions.length) {
+        this.triggerEmptyState();
+      }
     });
   }
 
@@ -118,7 +128,19 @@ export default class AdvanceSearchBar extends React.Component {
 
     this.setState({
       selectedOptions: selectedOptions
+    }, () => {
+      const selectedOptions = Object.keys(this.state.selectedOptions);
+      if (!selectedOptions.length) {
+        this.triggerEmptyState();
+      }
     });
+  }
+
+  handleClean () {
+    this.setState({
+      selectedOptions: {},
+      searchInputValue: ''
+    }, () => { this.triggerEmptyState(); });
   }
 
   setTextInputRef (element) {
@@ -133,6 +155,10 @@ export default class AdvanceSearchBar extends React.Component {
 
   triggerSearch () {
     this.props.callback(this.state.selectedOptions);
+  }
+
+  triggerEmptyState () {
+    this.props.emptyCallback();
   }
 
   getCurrentTags (optionList) {
@@ -163,6 +189,13 @@ export default class AdvanceSearchBar extends React.Component {
         { optionList }
       </InputOptionListTextField>
     );
+
+    if (inputs.length > 1 || this.state.searchInputValue.length >= 1) {
+      inputs.push(
+        <DeleteIcon className='search-bar__clean' width='32' height='32' key='search-bar-clean' onClick={this.handleClean} />
+      );
+    }
+
     return inputs;
   }
 
@@ -185,17 +218,31 @@ export default class AdvanceSearchBar extends React.Component {
     return Object.values(this.state.selectedOptions).some((value) => { return value.length > 0; });
   }
 
+  showHelper () {
+    return this.state.searchInputValue.length > 3;
+  }
+
+  handleSearchButton (showHeper) {
+    if (showHeper) {
+      this.changeHelperDisplay(true);
+    } else {
+      this.triggerSearch();
+    }
+  }
+
   render () {
-    let list;
+    const searchValid = this.isSearchValid();
+    const showHelper = this.showHelper();
     let optionList = this.getCurrentInputOptionList();
-    let searchValid = this.isSearchValid();
+    let list;
+
     if (this.state.showHelper) {
       list = <InputOptionListHelper handleOptionSelect={this.handleOptionSelect}
         changeSearchIndexSelected={this.changeSearchIndexSelected}
         changeHelperDisplay={this.changeHelperDisplay}
         value={this.state.searchInputValue}
         selectedOption={this.state.searchIndexSelected}
-        helperTitle={this.props.helperTitle}
+        helperTitleFunction={this.props.helperTitleFunction}
         helperTextButton={this.props.helperTextButton}>
         { optionList }
       </InputOptionListHelper>;
@@ -213,10 +260,10 @@ export default class AdvanceSearchBar extends React.Component {
         <div className={`search-bar__container ${this.state.focus ? 'search-bar__container--focus' : ''}`}>
           { this.getCurrentTags(optionList) }
         </div>
-        <button className={`search-bar__button ${searchValid ? 'search-bar__button--active' : ''} ${this.state.focus ? 'search-bar__button--active-border' : ''}`}
-          disabled={!searchValid}
-          onClick={this.triggerSearch}>{this.props.buttonText}</button>
-        <label className={`search-bar__label ${this.state.focus ? 'search-bar__label--float' : ''}`}>{this.props.labelText}</label>
+        <button className={`search-bar__button ${searchValid || showHelper ? 'search-bar__button--active' : ''} ${this.state.focus ? 'search-bar__button--active-border' : ''}`}
+          disabled={!searchValid && !showHelper}
+          onClick={() => this.handleSearchButton(showHelper)}>{this.props.buttonText}</button>
+        { this.props.labelText && <label className={`search-bar__label ${this.state.focus ? 'search-bar__label--float' : ''}`}>{this.props.labelText}</label> }
         { list }
       </div>
     );
@@ -225,11 +272,12 @@ export default class AdvanceSearchBar extends React.Component {
 
 AdvanceSearchBar.propTypes = {
   callback: PropTypes.func.isRequired,
+  emptyCallback: PropTypes.func,
+  helperTitleFunction: PropTypes.func,
   children: PropTypes.node.isRequired,
   labelText: PropTypes.string,
   buttonText: PropTypes.string,
   notTagFound: PropTypes.string,
-  helperTitle: PropTypes.string,
   helperTextButton: PropTypes.string
 };
 
@@ -237,6 +285,11 @@ AdvanceSearchBar.defaultProps = {
   labelText: 'Advance Search',
   buttonText: 'Search',
   notTagFound: 'No tags matched',
-  helperTitle: 'Please enter the field you are looking for',
-  helperTextButton: 'Cancel'
+  helperTextButton: 'Cancel',
+  helperTitleFunction: (word) => (
+    <div className='helper-title'>
+      You have written: <span className='helper-title__word'>{word}</span>.<br />
+      Please enter the field in which you are looking for
+    </div>
+  )
 };

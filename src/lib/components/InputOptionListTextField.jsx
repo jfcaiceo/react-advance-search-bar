@@ -57,6 +57,7 @@ export default class InputOptionListTextField extends React.Component {
 
   onEnter (event) {
     event.preventDefault();
+    event.stopPropagation();
     let options = getFilteredChildren(React.Children.toArray(this.props.children), this.props.value);
 
     if (options.length === 0) {
