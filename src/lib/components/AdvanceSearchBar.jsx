@@ -260,10 +260,17 @@ export default class AdvanceSearchBar extends React.Component {
         <div className={`search-bar__container ${this.state.focus ? 'search-bar__container--focus' : ''}`}>
           { this.getCurrentTags(optionList) }
         </div>
-        <button className={`search-bar__button ${searchValid || showHelper ? 'search-bar__button--active' : ''} ${this.state.focus ? 'search-bar__button--active-border' : ''}`}
+
+        <button
+          className={`search-bar__button ${searchValid || showHelper ? 'search-bar__button--active' : ''} ${this.state.focus ? 'search-bar__button--active-border' : ''}`}
           disabled={!searchValid && !showHelper}
-          onClick={() => this.handleSearchButton(showHelper)}>{this.props.buttonText}</button>
+          onClick={() => this.handleSearchButton(showHelper)}
+        >
+          {this.props.buttonText}
+        </button>
+
         { this.props.labelText && <label className={`search-bar__label ${this.state.focus ? 'search-bar__label--float' : ''}`}>{this.props.labelText}</label> }
+
         { list }
       </div>
     );
@@ -282,14 +289,19 @@ AdvanceSearchBar.propTypes = {
 };
 
 AdvanceSearchBar.defaultProps = {
-  labelText: 'Advance Search',
-  buttonText: 'Search',
+  buttonText: (
+    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
+      <path d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z' />
+      <path d='M0 0h24v24H0z' fill='none' />
+    </svg>
+  ),
+  labelText: 'Advance search',
   notTagFound: 'No tags matched',
   helperTextButton: 'Cancel',
   helperTitleFunction: (word) => (
-    <div className='helper-title'>
-      You have written: <span className='helper-title__word'>{word}</span>.<br />
-      Please enter the field in which you are looking for
+    <div className='search-bar__modal-header'>
+      <p className='search-bar__modal-title'>What do you want to search?</p>
+      <p className='search-bar__modal-subtitle'>You have written: <b>{word}</b>. Please enter the field in which you are looking for.</p>
     </div>
   )
 };

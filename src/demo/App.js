@@ -3,14 +3,14 @@ import { AdvanceSearchBar, InputOption } from '../lib';
 
 const FIRST_OPTIONS = [
   { name: 'first_suboption0', label: 'Suboption 0' },
-  { name: 'second_suboption0', label: 'Suboption 1' }
+  { name: 'first_suboption1', label: 'Suboption 1' }
 ];
 
 const SECOND_OPTIONS = [
-  { name: 'first_suboption1', label: 'Suboption 0' },
-  { name: 'second_suboption1', label: 'Suboption 1' },
-  { name: 'third_suboption1', label: 'Suboption 2' },
-  { name: 'fourth_suboption1', label: 'Suboption 3' }
+  { name: 'fifth_suboption0', label: 'Suboption 0' },
+  { name: 'fifth_suboption1', label: 'Suboption 1' },
+  { name: 'fifth_suboption2', label: 'Suboption 2' },
+  { name: 'fifth_suboption3', label: 'Suboption 3' }
 ];
 
 const App = () => (
