@@ -78,6 +78,12 @@ export default class AdvanceSearchBar extends React.Component {
   }
 
   changeHelperDisplay (value) {
+    const checkInputOptions = this.getCurrentInputOptionList();
+    console.log('There is, ', checkInputOptions);
+    if (checkInputOptions.length === 0 && this.state.showHelper === false) {
+      this.triggerSearch();
+      return;
+    }
     this.setState({
       showHelper: value,
       searchIndexSelected: 0
